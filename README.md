@@ -94,6 +94,8 @@ Now, every commit should be signed. You can verify the signator using `git-verif
 
 * Fluxion **DOES NOT WORK** on Linux Subsystem For Windows 10, because the subsystem doesn't allow access to network interfaces. Any Issue regarding the same would be **Closed Immediately**
 
+* fluxion创建AP卡住（5G）解决方法 https://zhuanlan.zhihu.com/p/647482004
+
 ## Links
 **Fluxion website:** https://fluxionnetwork.github.io/fluxion/ <br>
 **Discord:** https://discordapp.com/invite/G43gptk <br>
