@@ -56,12 +56,32 @@ function ap_service_prep() {
   ap_service_stop
 
   # Prepare the hostapd config file.
+  country_code="$(iw reg get | awk 'FNR == 2 {print $2}' | cut -f 1 -d ":" 2> /dev/null)"
+  [[ ! ${country_code} =~ ^[A-Z]{2}$ ]] && country_code="00"
+  rm -rf "$APServiceConfigDirectory/$APServiceMAC-hostapd.conf" > /dev/null 2>&1
+ 
   echo "\
 interface=$APServiceInterface
 driver=nl80211
 ssid=$APServiceSSID
 channel=$APServiceChannel" \
   > "$APServiceConfigDirectory/$APServiceMAC-hostapd.conf"
+
+  if [[ ${APServiceChannel} -gt 14 ]];then
+      {
+      echo -e "hw_mode=a"
+      } >> "$APServiceConfigDirectory/$APServiceMAC-hostapd.conf"
+  else
+      {
+      echo -e "hw_mode=g"
+      } >> "$APServiceConfigDirectory/$APServiceMAC-hostapd.conf"
+  fi
+ 
+  if [[ "${country_code}" != "00" ]];then
+      {
+      echo -e "country_code=${country_code}"
+      } >> "$APServiceConfigDirectory/$APServiceMAC-hostapd.conf"
+  fi
 
   # Spoof virtual interface MAC address.
   ip link set $APServiceInterface down
